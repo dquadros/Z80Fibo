@@ -1,0 +1,33 @@
+1     0000                      ORG $0
+2     0000              
+3     0000              start:
+4     0000  21 00 20            ld      hl,$2000
+5     0003  F9                  ld      sp,hl       ; pilha no final da Ram
+6     0004              loop1:
+7     0004  AF                  xor     a           ; n = 0
+8     0005              loop2:
+9     0005  F5                  push    af
+10    0006  CD 13 00            call    fibo
+11    0009  D3 55               out     ($55),a     ; mostrar fibo(n)
+12    000B  F1                  pop     af
+13    000C  3C                  inc     a
+14    000D  FE 0E               cp      14
+15    000F  20 F4               jr      nZ,loop2    ; repetir até n = 13
+16    0011  18 F1               jr      loop1       ; depois voltar para n = 0
+17    0013              
+18    0013              fibo:
+19    0013  FE 02               cp      2
+20    0015  D8                  ret     c           ; fibo(0) = 0, fibo(1) = 1
+21    0016  3D                  dec     a
+22    0017  F5                  push    af
+23    0018  CD 13 00            call    fibo
+24    001B  47                  ld      b,a         ; b = fibo(n-1)
+25    001C  F1                  pop     af
+26    001D  3D                  dec     a
+27    001E  C5                  push    bc
+28    001F  CD 13 00            call    fibo        ; a = fibo(n-2)
+29    0022  C1                  pop     bc
+30    0023  80                  add     b           ; fibo(n) = fibo(n-1)+fibo(n-2)
+31    0024  C9                  ret
+32    0025              
+33    0025              
